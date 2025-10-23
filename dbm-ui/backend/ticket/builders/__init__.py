@@ -269,10 +269,10 @@ class ResourceApplyParamBuilder(CallBackBuilderMixin):
         exclusive_hosts = list({host.bk_host_id: host for host in exclusive_hosts}.values())
 
         # 如果不需要亲和性，则更新城市，亲和性固定为None
-        if no_need_affinity:
-            resource_spec[role]["location_spec"] = {"city": cluster.region, "sub_zone_ids": []}
-            resource_spec[role]["affinity"] = AffinityEnum.NONE
-            return
+        # if no_need_affinity:
+        #     resource_spec[role]["location_spec"] = {"city": cluster.region, "sub_zone_ids": []}
+        #     resource_spec[role]["affinity"] = AffinityEnum.NONE
+        #     return
 
         # 获取互斥机器园区、园区信息
         current_hosts = [

@@ -67,14 +67,7 @@ class ToolboxHandler(ClusterServiceHandler):
             shard_node_count = len(mongodb) / shard_num
             # 获取各个分片的节点组
             inst_filter = Q(
-<<<<<<< HEAD
                 instance_role__in=[role for role in MachineTypeInstanceRoleMap[MachineType.MONGODB]],
-=======
-                reduce(
-                    operator.or_,
-                    [Q(instance_role=role) for role in MachineTypeInstanceRoleMap[MachineType.MONGODB]],
-                ),
->>>>>>> d9ff13c2b (feat(backend): Mongo 亲和性优化 #13479)
                 cluster=cluster,
                 machine_type=MachineType.MONGODB,
             )
@@ -106,14 +99,7 @@ class ToolboxHandler(ClusterServiceHandler):
     @classmethod
     def get_shard_others_instance(cls, storage, cluster):
         inst_filter = Q(
-<<<<<<< HEAD
             instance_role__in=[role for role in MachineTypeInstanceRoleMap[MachineType.MONGODB]],
-=======
-            reduce(
-                operator.or_,
-                [Q(instance_role=role) for role in MachineTypeInstanceRoleMap[MachineType.MONGODB]],
-            ),
->>>>>>> d9ff13c2b (feat(backend): Mongo 亲和性优化 #13479)
             cluster=cluster,
             machine_type=MachineType.MONGODB,
         )

@@ -432,6 +432,7 @@ class TicketType(StrStructuredEnum):
     REDIS_TENDIS_META_MITRATE = TicketEnumField("REDIS_TENDIS_META_MITRATE", _("Redis 数据迁移"), register_iam=False)
     REDIS_SLOTS_MIGRATE = TicketEnumField("REDIS_SLOTS_MIGRATE", _("Redis slots 迁移"), register_iam=False)
     REDIS_VERSION_UPDATE_ONLINE = TicketEnumField("REDIS_VERSION_UPDATE_ONLINE", _("Redis 集群版本升级"))  # noqa
+    TENDBCLUSTER_SPIDER_CONF_UP_DOWN = TicketEnumField("TENDBCLUSTER_SPIDER_CONF_UP_DOWN", _("TenDB Cluster 接入层升降配"), _("运维 Spider 管理"))  # noqa
     REDIS_CLUSTER_REINSTALL_DBMON = TicketEnumField("REDIS_CLUSTER_REINSTALL_DBMON", _("REDIS 集群标准化"))  # noqa
     REDIS_PREDIXY_CONFIG_SERVERS_REWRITE = TicketEnumField("REDIS_PREDIXY_CONFIG_SERVERS_REWRITE", _("predixy配置重写"), register_iam=False)  # noqa
     REDIS_CLUSTER_PROXYS_UPGRADE = TicketEnumField("REDIS_CLUSTER_PROXYS_UPGRADE", _("Redis 集群proxys版本升级"), register_iam=False)  # noqa

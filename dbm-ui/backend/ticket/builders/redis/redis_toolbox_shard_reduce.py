@@ -30,7 +30,7 @@ class RedisShardReduceDetailSerializer(RedisBaseOperateDetailSerializer):
         shard_num = serializers.IntegerField(help_text=_("集群分片数"))
         group_num = serializers.IntegerField(help_text=_("部署机器组数"))
         current_group_num = serializers.IntegerField(help_text=_("当前组数"), required=False)
-        current_spec_id = serializers.IntegerField(help_text=_("当前规格ID"), required=False)
+        spec_id = serializers.IntegerField(help_text=_("当前规格ID"), required=False)
         db_version = serializers.CharField(help_text=_("版本号"))
         capacity = serializers.FloatField(help_text=_("当前容量需求"))
         future_capacity = serializers.FloatField(help_text=_("未来容量需求"))

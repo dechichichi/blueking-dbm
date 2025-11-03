@@ -9,20 +9,19 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
 
-from backend.db_meta.enums import MachineType, TenDBClusterSpiderRole
+from backend.db_meta.enums import TenDBClusterSpiderRole
+from backend.db_meta.models import Cluster
 from backend.flow.engine.controller.spider import SpiderController
 from backend.ticket import builders
+from backend.ticket.builders.common.base import fetch_cluster_ids
 from backend.ticket.builders.tendbcluster.base import BaseTendbTicketFlowBuilder, TendbBaseOperateResourceParamBuilder
 from backend.ticket.builders.tendbcluster.tendb_spider_switch_nodes import SpiderSwitchNodesDetailSerializer
 from backend.ticket.constants import TicketType
 
 
 class SpiderConfUpDownDetailSerializer(SpiderSwitchNodesDetailSerializer):
-    spider_role = serializers.ChoiceField(
-        help_text=_("接入层类型"), choices=TenDBClusterSpiderRole.get_choices(), required=False
-    )
+    pass
 
 
 class SpiderConfUpDownFlowParamBuilder(builders.FlowParamBuilder):
@@ -34,20 +33,23 @@ class SpiderConfUpDownFlowParamBuilder(builders.FlowParamBuilder):
 class TendbSpiderConfUpDownResourceParamBuilder(TendbBaseOperateResourceParamBuilder):
     def format(self):
         infos = self.ticket_data["infos"]
-        spider_role = infos[0]["spider_role"]
-        self.patch_info_common_affinity(
-            role=spider_role,
-            remain_machine_type=MachineType.SPIDER,
-            replace_key=spider_role,
-            tolerance=0.5,
-            no_need_affinity=spider_role == TenDBClusterSpiderRole.SPIDER_SLAVE,
-        )
+        cluster_ids = fetch_cluster_ids(infos)
+        cluster_map = Cluster.objects.in_bulk(cluster_ids)
+        for info in infos:
+            self.patch_common_affinity(
+                info,
+                role=info["switch_spider_role"],
+                cluster=cluster_map[info["cluster_id"]],
+                exclusive_hosts=[],
+                tolerance=0.5,
+                no_need_affinity=info["switch_spider_role"] == TenDBClusterSpiderRole.SPIDER_SLAVE,
+            )
 
     def post_callback(self):
         next_flow = self.ticket.next_flow()
         for info in next_flow.details["ticket_data"]["infos"]:
             # 格式化规格信息
-            role = (info["switch_spider_role"],)
+            role = info["switch_spider_role"]
             info["spider_new_ip_list"] = info.pop(role)
 
         next_flow.save(update_fields=["details"])

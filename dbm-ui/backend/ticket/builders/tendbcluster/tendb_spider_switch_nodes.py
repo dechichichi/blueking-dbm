@@ -83,7 +83,7 @@ class TendbSpiderSwitchNodesResourceParamBuilder(TendbBaseOperateResourceParamBu
         next_flow = self.ticket.next_flow()
         for info in next_flow.details["ticket_data"]["infos"]:
             # 格式化规格信息
-            role = (info["switch_spider_role"],)
+            role = info["switch_spider_role"]
             info["spider_new_ip_list"] = info.pop(role)
 
         next_flow.save(update_fields=["details"])
